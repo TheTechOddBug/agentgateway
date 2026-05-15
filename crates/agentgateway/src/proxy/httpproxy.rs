@@ -1461,8 +1461,8 @@ async fn make_backend_call(
 	let hbone_source = req
 		.extensions()
 		.get::<WaypointService>()
-		.is_some()
-		.then_some(HboneSourceRole::Waypoint);
+		.map(|_| HboneSourceRole::Waypoint)
+		.or(Some(HboneSourceRole::Gateway));
 
 	// The MCP backend aggregates multiple backends into a single backend.
 	// In some cases, we want to treat this as a normal backend, so we swap it out.
@@ -2036,7 +2036,7 @@ pub fn build_service_call(
 	// When set, route traffic through the waypoint instead of directly to the workload.
 	// Skip when we are acting as a waypoint: ingress_use_waypoint should only affect
 	// ingress gateways, never waypoint-to-waypoint traffic.
-	let waypoint = if svc.ingress_use_waypoint && hbone_source.is_none() {
+	let waypoint = if svc.ingress_use_waypoint && hbone_source != Some(HboneSourceRole::Waypoint) {
 		if let Some(wp) = &svc.waypoint {
 			let discovery = inputs.stores.read_discovery();
 			let wp_ip = match &wp.destination {
