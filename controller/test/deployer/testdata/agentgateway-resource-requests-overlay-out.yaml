@@ -2,10 +2,6 @@ apiVersion: v1
 automountServiceAccountToken: false
 kind: ServiceAccount
 metadata:
-  annotations:
-    infra-and-params: infra
-    my-annotation: my-value
-    prometheus.io/path: /something/else
   labels:
     app.kubernetes.io/instance: gw
     app.kubernetes.io/managed-by: agentgateway
@@ -13,8 +9,6 @@ metadata:
     app.kubernetes.io/version: 1.0.0-ci1
     gateway.networking.k8s.io/gateway-class-name: agentgateway
     gateway.networking.k8s.io/gateway-name: gw
-    infra-and-params: infra
-    my-label: my-value
   name: gw
 ---
 apiVersion: v1
@@ -23,10 +17,6 @@ data:
     config: {}
 kind: ConfigMap
 metadata:
-  annotations:
-    infra-and-params: infra
-    my-annotation: my-value
-    prometheus.io/path: /something/else
   labels:
     app.kubernetes.io/instance: gw
     app.kubernetes.io/managed-by: agentgateway
@@ -34,17 +24,11 @@ metadata:
     app.kubernetes.io/version: 1.0.0-ci1
     gateway.networking.k8s.io/gateway-class-name: agentgateway
     gateway.networking.k8s.io/gateway-name: gw
-    infra-and-params: infra
-    my-label: my-value
   name: gw
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    infra-and-params: infra
-    my-annotation: my-value
-    prometheus.io/path: /something/else
   labels:
     app.kubernetes.io/instance: gw
     app.kubernetes.io/managed-by: agentgateway
@@ -52,8 +36,6 @@ metadata:
     app.kubernetes.io/version: 1.0.0-ci1
     gateway.networking.k8s.io/gateway-class-name: agentgateway
     gateway.networking.k8s.io/gateway-name: gw
-    infra-and-params: infra
-    my-label: my-value
   name: gw
 spec:
   ports:
@@ -72,21 +54,13 @@ status:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    extra-annotation: v1
-    infra-and-params: params-but-only-because-overlays-happen-last
-    my-annotation: my-value
-    prometheus.io/path: /something/else
   labels:
     app.kubernetes.io/instance: gw
     app.kubernetes.io/managed-by: agentgateway
     app.kubernetes.io/name: gw
     app.kubernetes.io/version: 1.0.0-ci1
-    extra-label: v1
     gateway.networking.k8s.io/gateway-class-name: agentgateway
     gateway.networking.k8s.io/gateway-name: gw
-    infra-and-params: params-but-only-because-overlays-happen-last
-    my-label: my-value
   name: gw
 spec:
   selector:
@@ -98,23 +72,17 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: eecf8edcf37f75935e67bb280c4158573434f258386cad8ed2dc680782155efb
+        checksum/config: 864542ed2e0b0de7cfd066cda1995c0816d7b62bfd2ec96fd7eaa6f50f2624aa
         checksum/session-key: 2a8abfa8cb9906290437854193ca6bca41d4d4e26d1d454bd66a35158095e737
-        extra-annotation: v1
         gateway.kgateway.dev/gateway-full-name: gw
-        infra-and-params: params-but-only-because-overlays-happen-last
-        my-annotation: my-value
-        prometheus.io/path: /something/else
+        prometheus.io/path: /metrics
         prometheus.io/port: "15020"
         prometheus.io/scrape: "true"
       labels:
         app.kubernetes.io/instance: gw
         app.kubernetes.io/name: gw
-        extra-label: v1
         gateway.networking.k8s.io/gateway-class-name: agentgateway
         gateway.networking.k8s.io/gateway-name: gw
-        infra-and-params: params-but-only-because-overlays-happen-last
-        my-label: my-value
     spec:
       containers:
       - args:
@@ -180,8 +148,7 @@ spec:
           periodSeconds: 10
         resources:
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 250m
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
